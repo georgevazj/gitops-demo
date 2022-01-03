@@ -9,7 +9,11 @@ spec:
   selector:
     matchLabels:
       app: gitops-demo
-  strategy: {}
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
   template:
     metadata:
       labels:
@@ -17,6 +21,9 @@ spec:
     spec:
       containers:
       - image: rancher/hello-world
+        imagePullPolicy: Always
         name: hello-world
-        resources: {}
-status: {}
+        ports:
+        - containerPort: 80
+          protocol: TCP
+      restartPolicy: Always
