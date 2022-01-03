@@ -1,9 +1,16 @@
 pipeline {
     agent any
+    environment {
+        gitcommit = "${gitcommit}"
+    }
     stages {
-        stage('Build') {
+        stage('Verificación SCM') {
             steps {
-                sh 'echo "Hello World"'
+                script {
+                    checkout scm
+                    sh "git rev-parse --short HEAD > .git/commit-id"  
+                    gitcommit = readFile('.git/commit-id').trim()
+                }
             }
         }
     }
