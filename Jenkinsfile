@@ -6,9 +6,11 @@ pipeline {
     stages {
         stage('Verify SCM') {
             steps {
-                checkout scm
-                sh "git rev-parse --short HEAD > .git/commit-id"                        
-                gitcommit = readFile('.git/commit-id').trim()
+                script {
+                    checkout scm
+                    sh "git rev-parse --short HEAD > .git/commit-id"                        
+                    gitcommit = readFile('.git/commit-id').trim()
+                }
             }
         }
         stage('Test') {
