@@ -14,8 +14,9 @@ pipeline {
         stage('Test') {
             steps {
                 nodejs(nodeJSInstallationName: 'nodejs') {
-                sh 'npm install --only=dev'
-                sh 'npm test'
+                    sh 'npm install --only=dev'
+                    sh 'npm test'
+                }
             }
         }
         stage('Docker build & push') {
@@ -28,5 +29,5 @@ pipeline {
                 }
             }
         }
-    } 
+    }
 }
