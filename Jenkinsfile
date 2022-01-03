@@ -31,5 +31,14 @@ pipeline {
                 }
             }
         }
+        stage('Deploy') {
+            steps {
+                withCredentials([string(credentialsId: "jenkins-argocd-deploy", variable: 'ARGOCD_AUTH_TOKEN')]) {
+                    sh '''
+                    argocd version
+                    '''
+                }
+            }
+        }
     }
 }
