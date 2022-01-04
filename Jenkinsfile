@@ -34,10 +34,9 @@ pipeline {
         }
         stage('Update manifests') {
             steps {
-                withCredentials([string(credentialsId: "github-georgevazj", passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                    sh '''
-                    git clone ${manifests_git} dev
-                    '''
+                script {
+                    sh "git clone ${manifests_git} manifests"
+                    sh "ls manifests"
                 }
             }
         }
