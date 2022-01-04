@@ -35,12 +35,19 @@ pipeline {
         stage('Update manifests') {
             steps {
                 script {
-                    sh '''
-                    rm -rf ops
-                    git clone ${manifests_git} ops
-                    cd ops
-                    touch deployment.yaml
-                    '''
+                    sh 'git config --global credential.helper cache'
+                    sh 'git config --global push.default simple'
+                    checkout([
+                        $class: 'GitSCM',
+                        branches: [[name: branch]],
+                        extensions: [
+                            [$class: 'CloneOption', noTags: true, reference: '', shallow: true]
+                        ],
+                        submoduleCfg: [],
+                        userRemoteConfigs: [
+                            [ credentialsId: 'github-georgevazj', url: manifests_git]
+                        ]
+                    ])
                 }
             }
         }
