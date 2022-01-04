@@ -36,7 +36,7 @@ pipeline {
             steps {
                 script {
                     sh '''
-                        git config --global credential.helper cache"
+                        git config --global credential.helper cache
                         git config --global push.default simple
                     '''
                     checkout([
