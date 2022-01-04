@@ -35,7 +35,8 @@ pipeline {
         stage('Update manifests') {
             steps {
                 script {
-                    sh 'git config --global credential.helper cache'
+                    sh "git config --global credential.helper cache"
+                    sh "git config --global push.default simple"
                     checkout([
                         $class: 'GitSCM',
                         branches: [[name: branch]],
