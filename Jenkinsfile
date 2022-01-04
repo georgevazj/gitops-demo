@@ -35,8 +35,8 @@ pipeline {
         stage('Update manifests') {
             steps {
                 script {
-                    sh "git clone ${manifests_git} manifests"
-                    sh "ls manifests"
+                    sh "git clone ${manifests_git} ops"
+                    sh "ls ops"
                 }
             }
         }
