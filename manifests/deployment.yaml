@@ -20,7 +20,7 @@ spec:
         app: gitops-demo
     spec:
       containers:
-      - image: rancher/hello-world
+      - image: georgevazj/gitops-demo:latest
         imagePullPolicy: Always
         name: hello-world
         ports:

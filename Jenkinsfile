@@ -2,6 +2,7 @@ pipeline {
     agent any
     environment {
         gitcommit = "${gitcommit}"
+        manifests_git = "https://github.com/georgevazj/gitops-demo-ops.git"
     }
     stages {
         stage('Verify SCM') {
@@ -31,18 +32,11 @@ pipeline {
                 }
             }
         }
-        stage('Deploy') {
+        stage('Update manifests') {
             steps {
-                withCredentials([string(credentialsId: "argocd-deploy-role", variable: 'ARGOCD_AUTH_TOKEN')]) {
+                withCredentials([string(credentialsId: "github-georgevazj", passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                     sh '''
-                    ARGOCD_SERVER="argocd.rkeingresspoc.easycloudpocs.com"
-                    APP_NAME="gitops-demo"
-                    CONTAINER="georgevazj/gitops-demo:${gitcommit}"
-
-                    # Deploy to ArgoCD
-                    ARGOCD_SERVER=$ARGOCD_SERVER argocd --grpc-web app set $APP_NAME --insecure --dest-namespace $APP_NAME --directory-include manifests --project default
-                    ARGOCD_SERVER=$ARGOCD_SERVER argocd --grpc-web app sync $APP_NAME --force --insecure
-                    ARGOCD_SERVER=$ARGOCD_SERVER argocd --grpc-web app wait $APP_NAME --timeout 600 --insecure
+                    git clone ${manifests_git} dev
                     '''
                 }
             }
