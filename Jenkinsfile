@@ -26,7 +26,7 @@ pipeline {
             steps {
                 script{
                     docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
-                        def app = docker.build("georgevazj/gitops-demo:${gitcommit}", ".")
+                        def app = docker.build("georgevazj/gitops-demo:latest", ".")
                         app.push()
                     }
                 }
@@ -39,8 +39,7 @@ pipeline {
                     rm -rf ops
                     git clone ${manifests_git} ops
                     cd ops
-                    sed -i "s/gitops-demo:latest/gitops-demo:${gitcommit}/g" deployment.yaml
-                    cat deployment.yaml | grep gitops-demo
+                    touch deployment.yaml
                     '''
                 }
             }
