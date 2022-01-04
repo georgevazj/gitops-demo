@@ -35,12 +35,13 @@ pipeline {
         stage('Update manifests') {
             steps {
                 script {
-                    sh '''git clone ${manifests_git} ops
+                    sh '''
+                    rm -rf ops
+                    git clone ${manifests_git} ops
                     cd ops
                     sed -i "s/gitops-demo:latest/gitops-demo:${gitcommit}/g" deployment.yaml
                     cat deployment.yaml | grep gitops-demo
                     '''
-                    
                 }
             }
         }
