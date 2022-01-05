@@ -37,6 +37,7 @@ pipeline {
     stage('Update manifests') {
       steps {
         git(url: 'https://github.com/georgevazj/gitops-demo-ops.git', branch: 'main', credentialsId: 'github-georgevazj')
+        sh 'ls -lha'
       }
     }
 
