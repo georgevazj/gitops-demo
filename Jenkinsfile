@@ -37,7 +37,7 @@ pipeline {
       steps {
         script {
             checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'github-georgevazj', url: 'https://github.com/georgevazj/gitops-demo-ops.git']]])
-            sh 'la -lha'   
+            sh 'ls -lha'   
         }
       }
     }
