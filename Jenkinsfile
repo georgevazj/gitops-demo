@@ -1,5 +1,8 @@
 pipeline {
   agent any
+  triggers {
+    pollSCM '* * * * *'
+  }
 
   stages {
     stage('Test') {
@@ -39,7 +42,7 @@ pipeline {
                     sh "git config user.name Jorge"
                     sh "git add ."
                     sh "git commit -m 'Triggered Build: ${env.BUILD_NUMBER}'"
-                    sh "git push https://${encodedPassword}@github.com/${GIT_USERNAME}/gitops-demo-ops.git HEAD:main"
+                    sh "git push https://${GIT_USERNAME}:${encodedPassword}@github.com/${GIT_USERNAME}/gitops-demo-ops.git HEAD:main"
                 }
             }
         }
