@@ -36,24 +36,6 @@ pipeline {
 
     stage('Update manifests') {
       steps {
-        script {
-          sh '''
-git config --global credential.helper cache
-git config --global push.default simple
-'''
-          checkout([
-            $class: 'GitSCM',
-            branches: [[name: branch]],
-            extensions: [
-              [$class: 'CloneOption', noTags: true, reference: '', shallow: true]
-            ],
-            submoduleCfg: [],
-            userRemoteConfigs: [
-              [ credentialsId: 'github-georgevazj', url: manifests_git]
-            ]
-          ])
-        }
-
         git(url: 'https://github.com/georgevazj/gitops-demo-ops.git', branch: 'main', credentialsId: 'github-georgevazj')
       }
     }
