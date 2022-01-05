@@ -1,28 +1,13 @@
 pipeline {
   agent any
-  environment {
-    gitcommit = "${gitcommit}"
-  }
+
   stages {
-    stage('Verify commit') {
-      steps {
-        script {
-            cleanWs()
-            checkout scm
-            sh "git rev-parse --short HEAD > .git/commit-id"  
-            gitcommit = readFile('.git/commit-id').trim()
-        }
-
-      }
-    }
-
     stage('Test') {
       steps {
         nodejs('nodejs') {
           sh 'npm install --only=dev'
           sh 'npm test'
         }
-
       }
     }
 
@@ -30,12 +15,11 @@ pipeline {
       steps {
         script {
           docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
-            def app = docker.build("georgevazj/gitops-demo:${gitcommit}", ".")
+            def app = docker.build("georgevazj/gitops-demo:${BUILD_TAG}", ".")
             app.push()
           }
             cleanWs()
         }
-
       }
     }
 
@@ -44,13 +28,13 @@ pipeline {
         script {
             checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'github-georgevazj', url: 'https://github.com/georgevazj/gitops-demo-ops.git']]])
             deployment = readFile('manifests/deployment.yaml')
-            text = deployment.replaceAll("%image: georgevazj/gitops-demo:*%", "image: georgevazj/gitops-demo:${gitcommmit}") 
+            text = deployment.replaceAll("%image: georgevazj/gitops-demo:*%", "image: georgevazj/gitops-demo:${BUILD_TAG}") 
             writeFile file: "manifests/deployment.yaml", text: "${text}"
         }
         script {
             sh 'git config --global user.email "georgevazj@gmail.com"'
             sh 'git config --global user.name "Jenkins"'
-            sh 'git add . && git commit -m "Update deployment.yaml"'
+            sh 'git add . && git commit -m "Deployment ${BUILD_TAG}"'
             sh 'git push'
         }
       }
