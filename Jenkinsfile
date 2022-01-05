@@ -27,8 +27,9 @@ pipeline {
         script {
             checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'github-georgevazj', url: 'https://github.com/georgevazj/gitops-demo-ops.git']]])
             def deployment = readFile('manifests/deployment.yaml')
-            replace = contentReplace(configs: [fileContentReplaceConfig(configs: [fileContentReplaceItemConfig(matchCount: 0, replace: '${BUILD_TAG}', search: '(jenkins-gitops-demo-main-)(\\d+\\d+)')], fileEncoding: 'UTF-8', filePath: 'manifests/deployment.yaml')])
-            echo replace
+            contentReplace(configs: [fileContentReplaceConfig(configs: [fileContentReplaceItemConfig(matchCount: 0, replace: '${BUILD_TAG}', search: '(jenkins-gitops-demo-main-)(\\d+\\d+)')], fileEncoding: 'UTF-8', filePath: 'manifests/deployment.yaml')])
+            def newFile = readFile('manifests/deployment.yaml')
+            echo newFile
         }
         script {
             sh 'git config --global user.email "georgevazj@gmail.com"'
