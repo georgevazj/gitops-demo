@@ -1,7 +1,15 @@
 pipeline {
   agent any
   stages {
-      
+    stage('Verify SCM') {
+      steps {
+        script {
+            checkout scm
+        }
+
+      }
+    }
+
     stage('Test') {
       steps {
         nodejs('nodejs') {
@@ -19,6 +27,7 @@ pipeline {
             def app = docker.build("georgevazj/gitops-demo:latest", ".")
             app.push()
           }
+            cleanWs()
         }
 
       }
@@ -27,9 +36,8 @@ pipeline {
     stage('Update manifests') {
       steps {
         script {
-            cleanWs()
             checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'github-georgevazj', url: 'https://github.com/georgevazj/gitops-demo-ops.git']]])
-            sh 'ls -lha'   
+            sh ''   
         }
       }
     }
