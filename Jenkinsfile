@@ -39,6 +39,8 @@ pipeline {
         script {
             checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'github-georgevazj', url: 'https://github.com/georgevazj/gitops-demo-ops.git']]])
             sh 'touch ${WORKSPACE}/manifests/deployment.yaml'
+            sh 'git config --global user.email "georgevazj@gmail.com"'
+            sh 'git config --global user.name "Jenkins"'
             sh 'git add . && git commit -m "Update deployment.yaml"'
             sh 'git push'
         }
