@@ -46,7 +46,7 @@ pipeline {
             sh 'touch ${WORKSPACE}/manifests/deployment.yaml'
             deployment = readFile('${WORKSPACE}/manifests/deployment.yaml')
             text = deployment.replaceAll("%image: georgevazj/gitops-demo:*%", "image: georgevazj/gitops-demo:${gitcommmit}") 
-            writeFile: file: '${WORKSPACE}/manifests/deployment.yaml', text: text)
+            writeFile file: "${WORKSPACE}/manifests/deployment.yaml", text: "${text}"
         }
         script {
             sh 'git config --global user.email "georgevazj@gmail.com"'
