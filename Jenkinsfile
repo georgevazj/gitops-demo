@@ -1,16 +1,7 @@
 pipeline {
   agent any
   stages {
-    stage('Verify SCM') {
-      steps {
-        script {
-            cleanWs()   
-            checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'github-georgevazj', url: 'https://github.com/georgevazj/gitops-demo-ops.git'], [credentialsId: 'github-georgevazj', url: 'https://github.com/georgevazj/gitops-demo.git']]])
-        }
-
-      }
-    }
-
+      
     stage('Test') {
       steps {
         nodejs('nodejs') {
@@ -35,9 +26,11 @@ pipeline {
 
     stage('Update manifests') {
       steps {
-        sh '''
-           ls -lha
-        '''
+        script {
+            cleanWs()
+            checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'github-georgevazj', url: 'https://github.com/georgevazj/gitops-demo-ops.git']]])
+            sh 'ls -lha'   
+        }
       }
     }
 
