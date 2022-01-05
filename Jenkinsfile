@@ -27,7 +27,7 @@ pipeline {
         script {
             checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'github-georgevazj', url: 'https://github.com/georgevazj/gitops-demo-ops.git']]])
             def deployment = readFile('manifests/deployment.yaml')
-            deployment = deployment.replaceAll("image:*", "image: georgevazj/gitops-demo:${BUILD_TAG}")
+            deployment = deployment.replaceAll("- image:*", "- image: georgevazj/gitops-demo:${BUILD_TAG}\n")
             echo deployment
             writeFile file: "manifests/deployment.yaml", text: "${deployment}"
         }
@@ -35,7 +35,7 @@ pipeline {
             sh 'git config --global user.email "georgevazj@gmail.com"'
             sh 'git config --global user.name "Jenkins"'
             sh 'git add . && git commit -m "Deployment ${BUILD_TAG}"'
-            sh 'git push'
+            sh 'git push -u origin main'
             cleanWs()
         }
       }
