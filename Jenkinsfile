@@ -32,11 +32,16 @@ pipeline {
             echo newFile
         }
         script {
-            sh 'git config --global user.email "georgevazj@gmail.com"'
-            sh 'git config --global user.name "Jenkins"'
-            sh 'git add . && git commit -m "Deployment ${BUILD_TAG}"'
-            sh 'git push -u origin main'
-            cleanWs()
+            catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                withCredentials([usernamePassword(credentialsId: 'github-georgevazj', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                    def encodedPassword = URLEncoder.encode("$GIT_PASSWORD",'UTF-8')
+                    sh "git config user.email georgevazj@gmail.com"
+                    sh "git config user.name Jorge"
+                    sh "git add ."
+                    sh "git commit -m 'Triggered Build: ${env.BUILD_NUMBER}'"
+                    sh "git push https://${GIT_USERNAME}:${encodedPassword}@github.com/${GIT_USERNAME}/gitops-demo-ops.git"
+                }
+            }
         }
       }
     }
