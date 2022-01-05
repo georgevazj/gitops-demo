@@ -4,9 +4,7 @@ pipeline {
     stage('Verify SCM') {
       steps {
         script {
-          checkout scm
-          sh "git rev-parse --short HEAD > .git/commit-id"
-          gitcommit = readFile('.git/commit-id').trim()
+          checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'github-georgevazj', url: 'https://github.com/georgevazj/gitops-demo-ops.git'], [credentialsId: 'github-georgevazj', url: 'https://github.com/georgevazj/gitops-demo.git']]])
         }
 
       }
@@ -36,10 +34,8 @@ pipeline {
 
     stage('Update manifests') {
       steps {
-        git(url: 'https://github.com/georgevazj/gitops-demo-ops.git', branch: 'main', credentialsId: 'github-georgevazj')
         sh '''
-            cd ops
-            ls -lha
+           ls -lha
         '''
       }
     }
