@@ -27,7 +27,7 @@ pipeline {
         script {
             checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'github-georgevazj', url: 'https://github.com/georgevazj/gitops-demo-ops.git']]])
             def deployment = readFile('manifests/deployment.yaml')
-            deployment = deployment.replaceAll("%image:%", "- image: georgevazj/gitops-demo:${BUILD_TAG}\n")
+            deployment = contentReplace(configs: [fileContentReplaceConfig(configs: [fileContentReplaceItemConfig(matchCount: 1, replace: '${BUILD-TAG}', search: '(jenkins-gitops-demo-main-)\\d+')], fileEncoding: 'UTF-8', filePath: 'manifests/deployment.yaml')])
             echo deployment
             writeFile file: "manifests/deployment.yaml", text: "${deployment}"
         }
