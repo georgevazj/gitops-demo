@@ -28,7 +28,8 @@ pipeline {
         script {
             checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'github-georgevazj', url: 'https://github.com/georgevazj/gitops-demo-ops.git']]])
             deployment = readFile('manifests/deployment.yaml')
-            text = deployment.replaceAll("%image: georgevazj/gitops-demo:*%", "image: georgevazj/gitops-demo:${BUILD_TAG}") 
+            text = deployment.replaceAll("image: georgevazj/gitops-demo:*%", "image: georgevazj/gitops-demo:${BUILD_TAG}")
+            echo text
             writeFile file: "manifests/deployment.yaml", text: "${text}"
         }
         script {
