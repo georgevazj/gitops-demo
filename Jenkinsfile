@@ -38,7 +38,9 @@ pipeline {
       steps {
         script {
             checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'github-georgevazj', url: 'https://github.com/georgevazj/gitops-demo-ops.git']]])
-            sh 'ls -lha ${WORKSPACE}'   
+            sh 'touch ${WORKSPACE}/manifests/deployment.yaml'
+            sh 'git add . && git commit -m "Update deployment.yaml"'
+            sh 'git push'
         }
       }
     }
