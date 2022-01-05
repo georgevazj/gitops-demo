@@ -47,5 +47,14 @@ pipeline {
     }
 
   }
+
+  post {
+    sucess {
+      slackSend message: "Your app is ready! - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
+    }
+    failure {
+      slackSend message: "Ups! Something went wrong... - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
+    }
+  }
   
 }
