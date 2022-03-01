@@ -25,7 +25,7 @@ pipeline {
     stage('Update manifests') {
       steps {
         script {
-            checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'github-georgevazj', url: 'https://github.com/georgevazj/gitops-demo-ops.git']]])
+            checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'github-georgevazj', url: 'https://github.com/georgevazj/terraform-rancher-rke_azure.git']]])
             def deployment = readFile('manifests/deployment.yaml')
             contentReplace(configs: [fileContentReplaceConfig(configs: [fileContentReplaceItemConfig(matchCount: 0, replace: '${BUILD_TAG}', search: '(jenkins-gitops-demo-main-)(\\d+\\d+)')], fileEncoding: 'UTF-8', filePath: 'manifests/deployment.yaml')])
             def newFile = readFile('manifests/deployment.yaml')
@@ -33,7 +33,7 @@ pipeline {
         }
         script {
             catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                withCredentials([usernamePassword(credentialsId: 'github-georgevazj', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                withCredentials([usernamePassword(credentialsId: 'gitshub-georgevazj', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                     def encodedPassword = URLEncoder.encode("$GIT_PASSWORD",'UTF-8')
                     sh "git config user.email georgevazj@gmail.com"
                     sh "git config user.name Jorge"
