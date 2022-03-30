@@ -150,6 +150,7 @@ jobs:
         registry: ${{ env.IMAGE_REGISTRY }}
         username: ${{ env.IMAGE_REGISTRY_USER }}
         password: ${{ env.IMAGE_REGISTRY_PASSWORD }}
+        tls-verify: false
 
     # The path the image was pushed to is now stored in ${{ steps.push-image.outputs.registry-path }}
 
