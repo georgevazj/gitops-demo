@@ -135,6 +135,11 @@ jobs:
         dockerfiles: |
           ./Dockerfile
 
+    # Docker login is required to push to the image registry.
+    - name: Docker login
+      run: |
+        docker login -u ${{ env.IMAGE_REGISTRY_USER }} -p ${{ env.IMAGE_REGISTRY_PASSWORD }}
+
     # https://github.com/redhat-actions/push-to-registry#readme
     - name: Push to registry
       id: push-image
@@ -161,10 +166,6 @@ jobs:
         openshift_token: ${{ env.OPENSHIFT_TOKEN }}
         insecure_skip_tls_verify: true
         namespace: ${{ env.OPENSHIFT_NAMESPACE }}
-
-    - name: Docker login
-      run: |
-        docker login -u ${{ env.IMAGE_REGISTRY_USER }} -p ${{ env.IMAGE_REGISTRY_PASSWORD }} ${{ env.IMAGE_REGISTRY }}
 
     # This step should create a deployment, service, and route to run your app and expose it to the internet.
     # https://github.com/redhat-actions/oc-new-app#readme
