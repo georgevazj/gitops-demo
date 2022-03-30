@@ -138,7 +138,7 @@ jobs:
     # Docker login is required to push to the image registry.
     - name: Docker login
       run: |
-        echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login --username "${{ secrets.REGISTRY_USERNAME }}" --password-stdin
+        docker login -u ${{ secrets.IMAGE_REGISTRY_USER }} -p ${{ secrets.IMAGE_REGISTRY_PASSWORD }}
     
     - name: Podman login
       uses: redhat-actions/podman-login@v1
