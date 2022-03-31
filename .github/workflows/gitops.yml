@@ -7,11 +7,9 @@ env:
   IMAGE_TAGS: ${GITHUB_SHA::12}
 
 on:
-  pull_request:
-    paths:
-    - "**/*.yml"
-    branches:
-    - main
+  push:
+    branches: [ main ]
+
 jobs:
   build-and-push:
     name: Build and push
