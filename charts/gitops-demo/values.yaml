@@ -8,7 +8,7 @@ image:
   repository: docker.io/georgevazj/gitops-demo
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: bfb574ca962c
+  tag: a589da478213b5939fda732085e163261bff2e20
 
 imagePullSecrets: []
 nameOverride: ""
