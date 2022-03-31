@@ -64,9 +64,8 @@ jobs:
     - name: Update manifests
       run: |
           path=${{ steps.push-image.outputs.registry-path }}
-          echo $path
           repository=$(cat ./charts/gitops-demo/values.yaml | grep repository: | awk '{print $2}')
-          sed -i "s/$repository/${path}/" ./charts/gitops-demo/values.yaml
+          sed -i "s/$repository/$path/" ./charts/gitops-demo/values.yaml
           cat ./charts/gitops-demo/values.yaml
 
     - name: Commit and push changes
