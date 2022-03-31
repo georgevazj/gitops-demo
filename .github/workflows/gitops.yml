@@ -64,7 +64,7 @@ jobs:
     - name: Update manifests
       run: |
           tag=$(cat ./charts/gitops-demo/values.yaml | grep tag: | awk '{print $2}')
-          sed -i "s/$tag/${GITHUB_SHA::12}/" ./charts/gitops-demo/values.yaml
+          sed -i "s/$tag/${GITHUB_SHA}/" ./charts/gitops-demo/values.yaml
           cat ./charts/gitops-demo/values.yaml
 
     - name: Commit and push changes
