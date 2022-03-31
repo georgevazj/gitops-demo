@@ -1,0 +1,76 @@
+name: Gitops
+env:
+  APP_NAME: "gitops-demo"
+  IMAGE_REGISTRY: ${{ secrets.IMAGE_REGISTRY }}
+  IMAGE_REGISTRY_USER: ${{ secrets.IMAGE_REGISTRY_USER }}
+  IMAGE_REGISTRY_PASSWORD: ${{ secrets.IMAGE_REGISTRY_PASSWORD }}
+  IMAGE_TAGS: ${GITHUB_SHA::12}
+
+on:
+  pull_request:
+    paths:
+    - "**/*.yml"
+    branches:
+    - master
+jobs:
+  build-and-push:
+    name: Build and push
+    runs-on: ubuntu-latest
+    environment: playground
+    steps:
+    
+    - name: Checkout
+      uses: actions/checkout@v3
+    
+    - name: Determine app name
+      if: env.APP_NAME == ''
+      run: |
+        echo "APP_NAME=$(basename $PWD)" | tee -a $GITHUB_ENV
+    
+    - name: Determine image tags
+      if: env.IMAGE_TAGS == ''
+      run: |
+        echo "IMAGE_TAGS=latest ${GITHUB_SHA::12}" | tee -a $GITHUB_ENV
+
+    # https://github.com/redhat-actions/buildah-build#readme
+    - name: Build from Dockerfile
+      id: build-image
+      uses: redhat-actions/buildah-build@v2
+      with:
+        image: ${{ env.APP_NAME }}
+        tags: ${{ env.IMAGE_TAGS }}
+
+        # If you don't have a Dockerfile/Containerfile, refer to https://github.com/redhat-actions/buildah-build#scratch-build-inputs
+        # Or, perform a source-to-image build using https://github.com/redhat-actions/s2i-build
+        # Otherwise, point this to your Dockerfile/Containerfile relative to the repository root.
+        dockerfiles: |
+          ./Dockerfile
+
+    # Docker login is required to push to the image registry.
+    - name: Docker login
+      run: |
+        docker login -u ${{ secrets.IMAGE_REGISTRY_USER }} -p ${{ secrets.IMAGE_REGISTRY_PASSWORD }}
+    
+    # https://github.com/redhat-actions/push-to-registry#readme
+    - name: Push to registry
+      id: push-image
+      uses: redhat-actions/push-to-registry@v2
+      with:
+        image: ${{ steps.build-image.outputs.image }}
+        tags: ${{ steps.build-image.outputs.tags }}
+        registry: ${{ env.IMAGE_REGISTRY }}
+        username: ${{ env.IMAGE_REGISTRY_USER }}
+        password: ${{ env.IMAGE_REGISTRY_PASSWORD }}
+        tls-verify: true
+    
+    - name: Update manifests
+      run: |
+          tag=$(cat ./charts/gitops-demo/values.yaml | grep tag: | awk '{print $2}')
+          sed -i "s/$tag/${GITHUB_REF##*/}-${GITHUB_SHA::12}/" ./charts/gitops-demo/values.yaml
+          cat ./charts/gitops-demo/values.yaml
+
+    - name: Commit and push changes
+      uses: devops-infra/action-commit-push@v0.3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        commit_message: Manifests updated
