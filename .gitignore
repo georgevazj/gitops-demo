@@ -1,3 +1,4 @@
 **/argocd-deploy*
 **/jenkins-token
 **/jenkinsfile_bck
+**/*.txt

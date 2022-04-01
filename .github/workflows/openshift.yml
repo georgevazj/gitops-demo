@@ -45,7 +45,7 @@ env:
 
   # 🖊️ EDIT to change the image registry settings.
   # Registries such as GHCR, Quay.io, and Docker Hub are supported.
-  IMAGE_REGISTRY: "docker.io/georgevazj"
+  IMAGE_REGISTRY: ${{ secrets.IMAGE_REGISTRY }}
   IMAGE_REGISTRY_USER: ${{ secrets.IMAGE_REGISTRY_USER }}
   IMAGE_REGISTRY_PASSWORD: ${{ secrets.IMAGE_REGISTRY_PASSWORD }}
 
@@ -56,7 +56,7 @@ on:
   # https://docs.github.com/en/actions/reference/events-that-trigger-workflows
   push:
     # Edit to the branch(es) you want to build and deploy on each push.
-    branches: [ main ]
+    branches: [ master ]
 
 jobs:
   openshift-ci-cd:

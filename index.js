@@ -1,8 +1,8 @@
 var express = require('express');
 var app = express();
 
-// var message = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat odio sed lobortis finibus. Pellentesque posuere rutrum ultrices. Praesent maximus.'
-var message = 'Hola mundo!'
+var message = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus placerat odio sed lobortis finibus. Pellentesque posuere rutrum ultrices. Praesent maximus.'
+// var message = 'Hola mundo!'
 app.get('/', function(req, res) {
     res.send(message);
 });

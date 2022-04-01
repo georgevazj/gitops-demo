@@ -1,0 +1,19 @@
+{{- if .Values.route.enabled -}}
+{{- $fullName := include "gitops-demo.fullname" . -}}
+{{- $svcPort := .Values.service.port -}}
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+    name: {{ $fullName }}
+    labels:
+        app: {{ $fullName }}
+spec:
+    host: {{ .Values.route.host }}
+    to:
+        kind: Service
+        name: {{ $fullName }}
+        weight: 100
+    port:
+        targetPort: {{ $svcPort }}
+    wildcardPolicy: None
+{{- end }}
