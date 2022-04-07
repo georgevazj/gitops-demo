@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: playground
     outputs:
-      image: ${{ steps.push-image.outputs.image }}
+      image: ${{ steps.build-image.outputs.image }}
       digest: ${{ steps.push-image.outputs.digest }}
     steps:
     
@@ -79,6 +79,5 @@ jobs:
     - name: Commit and push changes
       uses: devops-infra/action-commit-push@v0.3
       with:
-        target_branch: main
         github_token: ${{ secrets.GITHUB_TOKEN }}
         commit_message: Update deployment image tag to ${{ needs.build-and-push.outputs.digest }}
