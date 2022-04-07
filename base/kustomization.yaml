@@ -6,7 +6,7 @@ resources:
 - route.yaml
 - service.yaml
 images:
-- digest: sha256:24f97c995020448d9901d3151ee13bc052bd091d48365a643a03a072872a4a49
+- digest: sha256:69e23dac6765aa6ace146092b424698052ff68113c5e87fe954cb6df1dc4497b
   name: app-image
   newName: docker.io/georgevazj/gitops-demo
 namespace: argocd
