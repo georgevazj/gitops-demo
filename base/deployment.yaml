@@ -21,7 +21,7 @@ spec:
         app: gitops-demo
     spec:
       containers:
-      - image: "app-image"
+      - image: app-image
         imagePullPolicy: Always
         name: gitops-demo
         ports:
