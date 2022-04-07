@@ -79,5 +79,6 @@ jobs:
     - name: Commit and push changes
       uses: devops-infra/action-commit-push@v0.3
       with:
+        target_branch: main
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        commit_message: Update deployment image tag to ${{ needs.build-and-push.digest }}
+        commit_message: Update deployment image tag to ${{ needs.build-and-push.outputs.digest }}
