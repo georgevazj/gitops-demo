@@ -7,6 +7,6 @@ resources:
 - service.yaml
 images:
 - name: app-image
-  newName: :sha256
-  newTag: 94a7f271900b3a8cf63683315b07bf6f60bf77b99e60280abd55007f464267c2
+  newName: gitops-demo:sha256
+  newTag: 4460e3bd893e4461bdf0d6dbbbc6a216f3b09664df59726ef15ec715293db801
 namespace: argocd
