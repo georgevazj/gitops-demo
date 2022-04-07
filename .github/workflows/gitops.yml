@@ -67,11 +67,12 @@ jobs:
     runs-on: ubuntu-latest
     environment: playground
     steps:
+    - name: Checkout
+      uses: actions/checkout@v3
     - name: Update manifests with kustomize
       working-directory: "base"
       run: |
           kustomize edit set image app-image=${{ steps.build-image.outputs.image }}:${{ steps.push-image.outputs.digest }}
-
     - name: Commit and push changes
       uses: devops-infra/action-commit-push@v0.3
       with:
