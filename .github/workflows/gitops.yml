@@ -60,15 +60,20 @@ jobs:
         username: ${{ env.IMAGE_REGISTRY_USER }}
         password: ${{ env.IMAGE_REGISTRY_PASSWORD }}
         tls-verify: true
-    
-    - name: Update manifests
+
+  update-manifests:
+    name: Update manifests
+    needs: "build-and-push"
+    runs-on: ubuntu-latest
+    environment: playground
+    steps:
+    - name: Update manifests with kustomize
+      working-directory: "base"
       run: |
-          tag=$(cat ./charts/gitops-demo/values.yaml | grep tag: | awk '{print $2}')
-          sed -i "s/$tag/${{ steps.push-image.outputs.digest }}/" ./charts/gitops-demo/values.yaml
-          cat ./charts/gitops-demo/values.yaml
+          kustomize edit set image app-image=${{ steps.build-image.outputs.image }}:${{ steps.push-image.outputs.digest }}
 
     - name: Commit and push changes
       uses: devops-infra/action-commit-push@v0.3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        commit_message: Manifests updated
+        commit_message: Update deployment image tag to ${{ steps.push-image.outputs.digest }}

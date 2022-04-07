@@ -1,0 +1,16 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  labels:
+    app: gitops-demo
+    app.kubernetes.io/instance: gitops-demo
+  name: gitops-demo
+  namespace: argocd
+spec:
+  port:
+    targetPort: 3000
+  to:
+    kind: Service
+    name: gitops-demo
+    weight: 100
+  wildcardPolicy: None
