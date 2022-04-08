@@ -7,25 +7,24 @@ resources:
 - service.yaml
 
 labels:
-  - pairs:
-      project: gitops-demo
-      region: westeurope
-      kind: microservice
-      lang: nodejs
+- pairs:
+    kind: microservice
+    lang: nodejs
+    project: gitops-demo
+    region: westeurope
 
 commonAnnotations:
-  team: sanacloud
-  description: "GitOps demo"
+  description: GitOps demo
   source: kustomize
+  team: sanacloud
 
 images:
-- digest: sha256:582d3785b179b8708e106c46953df5484da54e8fa8c8795ea1284025346b55c3
+- digest: sha256:d8328102d6983eff52d0e909943011f6f257dd25115bf135361636e3db0abbe1
   name: app-image
   newName: docker.io/georgevazj/gitops-demo
 namespace: argocd
 
 replicas:
-- name: gitops-demo
-  count: 3
-
+- count: 3
+  name: gitops-demo
 nameSuffix: -playground
