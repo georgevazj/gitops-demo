@@ -8,7 +8,7 @@ metadata:
   namespace: argocd
 spec:
   port:
-    targetPort: 3000
+    targetPort: 80
   to:
     kind: Service
     name: gitops-demo
