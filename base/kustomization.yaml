@@ -19,7 +19,7 @@ commonAnnotations:
   source: kustomize
 
 images:
-- digest: sha256:69e23dac6765aa6ace146092b424698052ff68113c5e87fe954cb6df1dc4497b
+- digest: sha256:582d3785b179b8708e106c46953df5484da54e8fa8c8795ea1284025346b55c3
   name: app-image
   newName: docker.io/georgevazj/gitops-demo
 namespace: argocd
