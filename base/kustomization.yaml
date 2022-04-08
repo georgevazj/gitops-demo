@@ -25,6 +25,6 @@ images:
 namespace: argocd
 
 replicas:
-- count: 3
+- count: 1
   name: gitops-demo
 nameSuffix: -playground
