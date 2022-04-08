@@ -19,7 +19,7 @@ commonAnnotations:
   team: sanacloud
 
 images:
-- digest: sha256:aa7e0369bd061a477bddf4046664c055a8d34d53011a3222409c9a496bc71621
+- digest: sha256:213271d1d251f0d452e9923ec63c405d2ce6eaaf7c085eb284d06d4532c303c6
   name: app-image
   newName: docker.io/georgevazj/gitops-demo
 namespace: argocd
