@@ -4,11 +4,11 @@ metadata:
   labels:
     app: gitops-demo-playground
     app.kubernetes.io/instance: gitops-demo-playground
-  name: gitops-demo-playground
+  name: gitops-demo
   namespace: argocd
 spec:
   port:
-    targetPort: 80
+    targetPort: http
   to:
     kind: Service
     name: gitops-demo-playground
